@@ -320,7 +320,7 @@ export default function Home() {
             />
             <FAQItem
               question="When will devices ship?"
-              answer="Once we hit 50 pre-orders, we'll begin production. Estimated shipping is 6-8 weeks after the goal is reached."
+              answer="Once we hit 50 pre-orders, we'll begin production. Estimated shipping is 3 months after the goal is reached."
             />
           </div>
         </div>
