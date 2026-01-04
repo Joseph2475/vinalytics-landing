@@ -169,8 +169,7 @@ export default function Home() {
               <div className="progress-fill" style={{ width: `${progress}%` }} />
             </div>
             <p className="text-sm text-[--text-muted]">
-              We need {goalCount} pre-orders to start production.
-              {goalCount - orderCount} more to go!
+              We need {goalCount} pre-orders to start production. {goalCount - orderCount} more to go!
             </p>
           </div>
         </div>
