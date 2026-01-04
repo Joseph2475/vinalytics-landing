@@ -6,7 +6,10 @@ export function getStripe(): Stripe {
   if (!key) {
     throw new Error('STRIPE_SECRET_KEY is not set');
   }
-  return new Stripe(key);
+  return new Stripe(key, {
+    timeout: 30000, // 30 second timeout
+    maxNetworkRetries: 3,
+  });
 }
 
 export const DEPOSIT_AMOUNT = 2500; // £25 in pence
