@@ -6,9 +6,7 @@ export function getStripe(): Stripe {
   if (!key) {
     throw new Error('STRIPE_SECRET_KEY is not set');
   }
-  return new Stripe(key, {
-    apiVersion: '2025-12-15.clover',
-  });
+  return new Stripe(key);
 }
 
 export const DEPOSIT_AMOUNT = 2500; // £25 in pence
