@@ -1,15 +1,14 @@
 import Stripe from 'stripe';
 
-// Lazy initialization to avoid build-time errors
-let stripeInstance: Stripe | null = null;
-
+// Create new instance each time to ensure fresh env vars
 export function getStripe(): Stripe {
-  if (!stripeInstance) {
-    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: '2025-12-15.clover',
-    });
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY is not set');
   }
-  return stripeInstance;
+  return new Stripe(key, {
+    apiVersion: '2025-12-15.clover',
+  });
 }
 
 export const DEPOSIT_AMOUNT = 2500; // £25 in pence
