@@ -28,11 +28,28 @@ export async function POST() {
     });
 
     return NextResponse.json({ url: session.url });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Checkout error:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    let errorMessage = 'Unknown error';
+    let errorType = 'unknown';
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      errorType = error.name;
+    }
+
+    // Check for Stripe-specific errors
+    const stripeError = error as { type?: string; code?: string; statusCode?: number };
+
     return NextResponse.json(
-      { error: 'Failed to create checkout session', details: errorMessage },
+      {
+        error: 'Failed to create checkout session',
+        details: errorMessage,
+        type: errorType,
+        stripeType: stripeError?.type,
+        stripeCode: stripeError?.code,
+        statusCode: stripeError?.statusCode
+      },
       { status: 500 }
     );
   }
