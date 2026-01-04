@@ -1,31 +1,35 @@
 import { NextResponse } from 'next/server';
-import { getStripe, DEPOSIT_AMOUNT, DEPOSIT_CURRENCY } from '@/lib/stripe';
+
+const DEPOSIT_AMOUNT = 2500; // £25 in pence
+const DEPOSIT_CURRENCY = 'gbp';
 
 export async function POST() {
   try {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: DEPOSIT_CURRENCY,
-            product_data: {
-              name: 'Vinalytics Pre-order Deposit',
-              description: 'Refundable deposit to reserve your Vinalytics device',
-            },
-            unit_amount: DEPOSIT_AMOUNT,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
-      metadata: {
-        type: 'preorder_deposit',
+    const response = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
+      body: new URLSearchParams({
+        'payment_method_types[0]': 'card',
+        'line_items[0][price_data][currency]': DEPOSIT_CURRENCY,
+        'line_items[0][price_data][product_data][name]': 'Vinalytics Pre-order Deposit',
+        'line_items[0][price_data][product_data][description]': 'Refundable deposit to reserve your Vinalytics device',
+        'line_items[0][price_data][unit_amount]': DEPOSIT_AMOUNT.toString(),
+        'line_items[0][quantity]': '1',
+        'mode': 'payment',
+        'success_url': `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+        'cancel_url': `${process.env.NEXT_PUBLIC_BASE_URL}`,
+        'metadata[type]': 'preorder_deposit',
+      }),
     });
+
+    const session = await response.json();
+
+    if (!response.ok) {
+      throw new Error(session.error?.message || 'Stripe API error');
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (error: unknown) {
