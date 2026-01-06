@@ -58,6 +58,28 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   );
 }
 
+// Update card component (OpenAI research style)
+function UpdateCard({ date, title, content }: { date: string; title: string; content: string }) {
+  return (
+    <div className="border-l-2 border-[--gradient-start] pl-6 pb-8 relative">
+      <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-gradient-to-br from-[#ff6b6b] to-[#feca57]" />
+      <p className="text-sm text-[--gradient-end] font-medium mb-2">{date}</p>
+      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
+      <p className="text-[--text-muted]">{content}</p>
+    </div>
+  );
+}
+
+// Pricing item component
+function PricingItem({ item, price }: { item: string; price: string }) {
+  return (
+    <div className="flex justify-between items-center py-3 border-b border-white/10">
+      <span className="text-[--text-secondary]">{item}</span>
+      <span className="text-white font-medium">{price}</span>
+    </div>
+  );
+}
+
 export default function Home() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -175,6 +197,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Video Section */}
+      <section className="py-20 px-6 bg-black/20">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">
+            See It In <span className="gradient-text">Action</span>
+          </h2>
+          <p className="text-[--text-muted] text-center mb-8 max-w-2xl mx-auto">
+            Watch how Vinalytics works and learn about the technology behind it.
+          </p>
+          <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-white/10">
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+              title="Vinalytics Demo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section id="features" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
@@ -244,8 +287,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pre-order Section */}
+      {/* Pricing Breakdown Section */}
       <section className="py-20 px-6">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">
+            Pricing <span className="gradient-text">Breakdown</span>
+          </h2>
+          <p className="text-[--text-muted] text-center mb-8">
+            Here&apos;s what goes into building each Vinalytics unit.
+          </p>
+
+          <div className="card">
+            <PricingItem item="Raspberry Pi Zero 2 W" price="£15" />
+            <PricingItem item="USB Sound Card" price="£8" />
+            <PricingItem item="Custom 3D Printed Case" price="£12" />
+            <PricingItem item="RCA Y-Splitters (x2)" price="£6" />
+            <PricingItem item="RCA to 3.5mm Cable" price="£4" />
+            <PricingItem item="USB Power Supply" price="£8" />
+            <PricingItem item="Assembly & Testing" price="£20" />
+            <PricingItem item="Software & Support" price="£15" />
+            <div className="flex justify-between items-center py-4 mt-2">
+              <span className="text-white font-bold text-lg">Estimated Total</span>
+              <span className="text-2xl font-bold gradient-text">£88-£100</span>
+            </div>
+            <p className="text-sm text-[--text-muted] mt-4 text-center">
+              Final pricing of £125-150 includes shipping and a small margin to support ongoing development.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pre-order Section */}
+      <section className="py-20 px-6 bg-black/20">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Reserve Your <span className="gradient-text">Vinalytics</span>
@@ -290,6 +363,36 @@ export default function Home() {
                 </button>
               </form>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Updates Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">
+            Development <span className="gradient-text">Updates</span>
+          </h2>
+          <p className="text-[--text-muted] text-center mb-12">
+            Follow along as we build Vinalytics from prototype to production.
+          </p>
+
+          <div className="space-y-0">
+            <UpdateCard
+              date="January 2025"
+              title="Project Launch"
+              content="Launched the Vinalytics pre-order campaign. The prototype is fully functional and we're ready to scale to production once we hit 50 orders."
+            />
+            <UpdateCard
+              date="December 2024"
+              title="Prototype Complete"
+              content="Finished the working prototype with Shazam integration, Last.fm scrobbling, and the web dashboard. Everything works seamlessly."
+            />
+            <UpdateCard
+              date="November 2024"
+              title="Initial Development"
+              content="Started development of the vinyl tracking system. Built the core audio fingerprinting pipeline and database architecture."
+            />
           </div>
         </div>
       </section>
